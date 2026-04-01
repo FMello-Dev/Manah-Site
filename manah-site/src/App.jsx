@@ -30,7 +30,7 @@ function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#080808]/80 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <img src="/MANAH---LOGO-PNG.png" alt="MANAH" className="h-10 w-auto" />
+        <img src="/MANAH---LOGO-PNG.png" alt="MANAH" className="h-24 w-auto" />
         <a
           href="https://wa.me/5511999999999"
           target="_blank"
@@ -64,19 +64,21 @@ function Hero() {
         </motion.div>
 
         <motion.h1
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={1}
-          className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-6"
+           variants={fadeUp}
+           initial="hidden"
+           animate="visible"
+           custom={1}
+          className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6"
         >
-          Marketing que{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7B00FF] to-[#C070FF]">
+          <span className="block mb-2">Marketing que</span>
+          <span className="block mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#7B00FF] to-[#C070FF]">
             transforma
-          </span>{" "}
-          <br />
-          o seu negócio em referência
-        </motion.h1>
+          </span>
+          <span className="block mb-2">o seu negócio em</span>
+          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#7B00FF] to-[#C070FF]">
+            referência
+          </span>
+          </motion.h1>
 
         <motion.p
           variants={fadeUp}
@@ -350,7 +352,7 @@ function Footer() {
   return (
     <footer className="border-t border-white/6 py-10 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <img src="/MANAH---LOGO-PNG.png" alt="MANAH" className="h-8 w-auto opacity-80" />
+        <img src="/MANAH---LOGO-PNG.png" alt="MANAH" className="h-14 w-auto opacity-80" />
         <p className="text-[#444] text-sm">
           © {new Date().getFullYear()} MANAH Marketing. Todos os direitos reservados.
         </p>
