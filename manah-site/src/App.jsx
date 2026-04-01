@@ -350,7 +350,7 @@ function Footer() {
   return (
     <footer className="border-t border-white/6 py-10 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <img src="/MANAHLOGO.png" alt="MANAH" className="h-8 w-auto opacity-80" />
+        <img src="/MANAH---LOGO-PNG.png" alt="MANAH" className="h-8 w-auto opacity-80" />
         <p className="text-[#444] text-sm">
           © {new Date().getFullYear()} MANAH Marketing. Todos os direitos reservados.
         </p>
