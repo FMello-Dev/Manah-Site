@@ -1,8 +1,9 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   ArrowRight,
   GraduationCap,
-  UtensilsCrossed,
+  Users,
   TrendingUp,
   Megaphone,
   Palette,
@@ -11,12 +12,23 @@ import {
   CheckCircle2,
   Globe,
   Share2,
-  Share,
+  BookOpen,
+  Star,
 } from "lucide-react";
 
-// ── Animações reutilizáveis ──────────────────────────────────────
+const COLORS = {
+  bg: "#FFFFFF",
+  bgAlt: "#F5F5F7",
+  card: "#FFFFFF",
+  border: "#E5E7EB",
+  neon: "#7B00FF",
+  neonLight: "#C070FF",
+  text: "#0A0A0A",
+  textMuted: "#555555",
+};
+
 const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 30 },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
@@ -24,72 +36,195 @@ const fadeUp = {
   }),
 };
 
-// ── Componentes ─────────────────────────────────────────────────
+const services = [
+  {
+    icon: Share2,
+    title: "Gestão de Redes Sociais",
+    desc: "Conteúdo estratégico para Instagram, LinkedIn e Facebook focado em captação de alunos.",
+  },
+  {
+    icon: Megaphone,
+    title: "Campanhas de Matrícula",
+    desc: "Estratégias digitais para maximizar matrículas em cada período letivo.",
+  },
+  {
+    icon: Palette,
+    title: "Identidade Visual",
+    desc: "Design profissional que transmite credibilidade e modernidade para sua instituição.",
+  },
+  {
+    icon: BarChart3,
+    title: "Tráfego Pago",
+    desc: "Anúncios segmentados no Google e Meta para atingir pais e responsáveis na sua região.",
+  },
+  {
+    icon: Globe,
+    title: "Sites Institucionais",
+    desc: "Presença digital profissional que gera confiança e converte visitantes em matrículas.",
+  },
+  {
+    icon: BookOpen,
+    title: "Marketing de Conteúdo",
+    desc: "Artigos, e-books e materiais que posicionam sua escola como referência educacional.",
+  },
+];
+
+const results = [
+  { number: "120+", label: "Instituições Atendidas" },
+  { number: "3x", label: "Média de Crescimento em Matrículas" },
+  { number: "98%", label: "Taxa de Satisfação" },
+  { number: "1 ano", label: "de Experiência no Setor" },
+];
+
+const testimonials = [
+  {
+    name: "Dra. Ana Carvalho",
+    role: "Diretora — Colégio Horizonte",
+    text: "A MANAH transformou nossa presença digital. Triplicamos as matrículas em dois anos com estratégias certeiras e muito profissionalismo.",
+  },
+  {
+    name: "Prof. Ricardo Mendes",
+    role: "Coordenador — Instituto Saber",
+    text: "Finalmente uma agência que entende o mercado educacional. O retorno sobre o investimento foi visível já nos primeiros meses.",
+  },
+  {
+    name: "Maria Lúcia Fonseca",
+    role: "Gestora — Escola Primeiros Passos",
+    text: "Profissionalismo, criatividade e resultados reais. A MANAH é a parceira que toda escola precisa.",
+  },
+];
 
 function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#080808]/80 backdrop-blur-md">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <img src="/MANAH---LOGO-PNG.png" alt="MANAH" className="h-24 w-auto" />
-        <a
-          href="https://wa.me/5511999999999"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 bg-[#7B00FF] hover:bg-[#9B30FF] text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#7B00FF]/30"
-        >
-          Fale conosco
-          <ArrowRight size={14} />
-        </a>
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-16 py-4 transition-all duration-300"
+      style={{
+            background: scrolled
+            ? "rgba(255, 255, 255, 0.95)"
+            : "rgba(255, 255, 255, 1)",
+            backdropFilter: scrolled ? "blur(12px)" : "none",
+            borderBottom: `1px solid ${COLORS.border}`,
+            }}
+    >
+      <img src="/MANAH.png" alt="MANAH" className="h-24 w-auto" />
+      <div className="hidden md:flex items-center gap-8">
+        {["Serviços", "Resultados", "Depoimentos", "Contato"].map((item) => (
+          <a
+            key={item}
+            href={`#${item.toLowerCase()}`}
+            className="text-sm font-medium transition-colors duration-200"
+            style={{ color: COLORS.textMuted }}
+            onMouseEnter={(e) => (e.target.style.color = COLORS.neonLight)}
+            onMouseLeave={(e) => (e.target.style.color = COLORS.textMuted)}
+          >
+            {item}
+          </a>
+        ))}
       </div>
+      <a
+        href="#contato"
+        className="px-9 py-4 rounded-full text-sm font-semibold transition-all duration-200"
+        style={{
+          background: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+          color: "#fff",
+          boxShadow: `0 0 20px ${COLORS.neon}60`,
+        }}
+      >
+        Fale Conosco
+      </a>
     </nav>
   );
 }
 
 function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
-      {/* Glow de fundo */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#7B00FF]/10 blur-[120px] pointer-events-none" />
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-16"
+      style={{ background: COLORS.bg }}
+    >
+      {/* Background glow */}
+      <div
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20 pointer-events-none"
+        style={{
+          background: `radial-gradient(circle, ${COLORS.neon}, transparent)`,
+        }}
+      />
 
-      <div className="relative z-10 text-center max-w-4xl mx-auto pt-24">
+      {/* Gold accent line */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px]"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${COLORS.neon}, transparent)`,
+        }}
+      />
+
+      <div className="relative z-10 max-w-5xl mx-auto text-center">
         <motion.div
           variants={fadeUp}
           initial="hidden"
           animate="visible"
           custom={0}
-          className="inline-flex items-center gap-2 border border-[#7B00FF]/40 bg-[#7B00FF]/10 text-[#9B30FF] text-xs font-medium px-4 py-2 rounded-full mb-8"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-8 tracking-widest uppercase"
+          style={{
+            border: `1px solid ${COLORS.neon}60`,
+            color: COLORS.neon,
+            background: `${COLORS.neon}10`,
+          }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#7B00FF] animate-pulse" />
-          Agência especializada em escolas e buffets
+          <GraduationCap size={14} />
+          Especialistas em Marketing Educacional
         </motion.div>
 
         <motion.h1
-           variants={fadeUp}
-           initial="hidden"
-           animate="visible"
-           custom={1}
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          custom={1}
           className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6"
+          style={{ color: COLORS.text }}
         >
-          <span className="block mb-2">Marketing que</span>
-          <span className="block mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#7B00FF] to-[#C070FF]">
+          <span className="block mb-3">Marketing que</span>
+          <span
+            className="block mb-3"
+            style={{
+              backgroundImage: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             transforma
           </span>
-          <span className="block mb-2">o seu negócio em</span>
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#7B00FF] to-[#C070FF]">
-            referência
-          </span>
-          </motion.h1>
+          <span className="block mb-3">sua escola em</span>
+          <span
+            className="block"
+            style={{
+              backgroundImage: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+  referência
+</span>
+        </motion.h1>
 
         <motion.p
           variants={fadeUp}
           initial="hidden"
           animate="visible"
           custom={2}
-          className="text-[#888] text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+          style={{ color: COLORS.textMuted }}
         >
-          Ajudamos escolas e buffets a atrair mais clientes, construir autoridade
-          e crescer de forma previsível com estratégias digitais que funcionam de
-          verdade.
+          Estratégias digitais especializadas para instituições de ensino que
+          querem crescer com consistência, credibilidade e resultados reais.
         </motion.p>
 
         <motion.div
@@ -97,136 +232,44 @@ function Hero() {
           initial="hidden"
           animate="visible"
           custom={3}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <a
-            href="https://wa.me/5511999999999"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-[#7B00FF] hover:bg-[#9B30FF] text-white font-bold px-8 py-4 rounded-full text-base transition-all duration-300 hover:shadow-xl hover:shadow-[#7B00FF]/30 hover:-translate-y-0.5"
+            href="#contato"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm transition-all duration-200"
+            style={{
+              background: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+              color: "#fff",
+              boxShadow: `0 0 30px ${COLORS.neon}50`,
+            }}
           >
-            Quero crescer agora
-            <ArrowRight size={18} />
+            Quero mais matrículas
+            <ArrowRight size={16} />
           </a>
           <a
-            href="#servicos"
-            className="text-[#888] hover:text-white text-sm font-medium transition-colors duration-200"
+            href="#resultados"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm transition-all duration-200"
+            style={{
+              border: `1px solid ${COLORS.border}`,
+              color: COLORS.textMuted,
+              background: `${COLORS.card}`,
+            }}
           >
-            Ver serviços →
+            Ver resultados
           </a>
         </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function Niches() {
-  const niches = [
-    {
-      icon: GraduationCap,
-      title: "Escolas",
-      description:
-        "Matrículas, reputação e engajamento. Posicionamos sua escola como a melhor escolha para pais e alunos na sua região.",
-      items: ["Captação de matrículas", "Gestão de reputação online", "Conteúdo educacional"],
-    },
-    {
-      icon: UtensilsCrossed,
-      title: "Buffets",
-      description:
-        "Datas preenchidas, agenda lotada. Criamos estratégias para que o seu buffet seja o mais desejado da cidade.",
-      items: ["Agenda sempre ocupada", "Conteúdo que encanta", "Anúncios segmentados"],
-    },
-  ];
-
-  return (
-    <section className="py-24 px-6">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Especialistas no seu segmento
-          </h2>
-          <p className="text-[#666] text-lg max-w-xl mx-auto">
-            Não somos uma agência genérica. Conhecemos fundo os desafios de quem
-            trabalha com educação e eventos.
-          </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {niches.map((niche, i) => (
-            <motion.div
-              key={niche.title}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              custom={i}
-              className="group relative border border-white/8 bg-white/3 hover:border-[#7B00FF]/50 hover:bg-[#7B00FF]/5 rounded-2xl p-8 transition-all duration-300"
-            >
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-[#7B00FF]/20 flex items-center justify-center">
-                  <niche.icon size={22} className="text-[#9B30FF]" />
-                </div>
-                <h3 className="text-2xl font-bold">{niche.title}</h3>
-              </div>
-              <p className="text-[#777] mb-6 leading-relaxed">{niche.description}</p>
-              <ul className="space-y-2">
-                {niche.items.map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm text-[#999]">
-                    <CheckCircle2 size={14} className="text-[#7B00FF]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
   );
 }
 
 function Services() {
-  const services = [
-    {
-      icon: Megaphone,
-      title: "Tráfego Pago",
-      desc: "Anúncios no Meta e Google que trazem leads qualificados para o seu negócio.",
-    },
-    {
-      icon: Share2,
-      title: "Gestão de Redes",
-      desc: "Conteúdo estratégico e consistente para Instagram, Facebook e TikTok.",
-    },
-    {
-      icon: Palette,
-      title: "Identidade Visual",
-      desc: "Design que transmite profissionalismo e gera confiança imediata.",
-    },
-    {
-      icon: BarChart3,
-      title: "Relatórios e Métricas",
-      desc: "Acompanhamento transparente dos resultados com clareza e objetividade.",
-    },
-    {
-      icon: TrendingUp,
-      title: "SEO Local",
-      desc: "Apareça primeiro quando alguém buscar pelo seu serviço na sua cidade.",
-    },
-    {
-      icon: MessageCircle,
-      title: "Automação de CRM",
-      desc: "Follow-up automático para não perder nenhum lead no caminho.",
-    },
-  ];
-
   return (
-    <section id="servicos" className="py-24 px-6 bg-[#0D0D0D]">
+    <section
+      id="serviços"
+      className="py-24 px-6 md:px-16"
+      style={{ background: COLORS.bgAlt }}
+    >
       <div className="max-w-6xl mx-auto">
         <motion.div
           variants={fadeUp}
@@ -235,13 +278,37 @@ function Services() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">O que fazemos</h2>
-          <p className="text-[#666] text-lg max-w-xl mx-auto">
-            Cada serviço é planejado para gerar resultados reais, não só curtidas.
+          <p
+            className="text-xs font-semibold tracking-widest uppercase mb-3"
+            style={{ color: COLORS.neon }}
+          >
+            O que fazemos
+          </p>
+          <h2
+            className="text-3xl md:text-5xl font-black mb-4"
+            style={{ color: COLORS.text }}
+          >
+            Soluções para{" "}
+            <span
+              style={{
+                backgroundImage: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              instituições de ensino
+            </span>
+          </h2>
+          <p
+            className="text-lg max-w-xl mx-auto"
+            style={{ color: COLORS.textMuted }}
+          >
+            Cada estratégia é desenvolvida com profundo conhecimento do mercado
+            educacional brasileiro.
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => (
             <motion.div
               key={service.title}
@@ -249,14 +316,39 @@ function Services() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              custom={i * 0.05}
-              className="border border-white/8 bg-white/2 hover:border-[#7B00FF]/40 rounded-xl p-6 transition-all duration-300 hover:-translate-y-1"
+              custom={i}
+              className="p-6 rounded-2xl transition-all duration-300 group"
+              style={{
+                background: COLORS.card,
+                border: `1px solid ${COLORS.border}`,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = `${COLORS.neon}60`;
+                e.currentTarget.style.boxShadow = `0 0 30px ${COLORS.neon}20`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = COLORS.border;
+                e.currentTarget.style.boxShadow = "none";
+              }}
             >
-              <div className="w-10 h-10 rounded-lg bg-[#7B00FF]/15 flex items-center justify-center mb-4">
-                <service.icon size={18} className="text-[#9B30FF]" />
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                style={{
+                  background: `linear-gradient(135deg, ${COLORS.neon}30, ${COLORS.neonLight}20)`,
+                  border: `1px solid ${COLORS.neon}40`,
+                }}
+              >
+                <service.icon size={22} color={COLORS.neonLight} />
               </div>
-              <h3 className="font-bold text-lg mb-2">{service.title}</h3>
-              <p className="text-[#666] text-sm leading-relaxed">{service.desc}</p>
+              <h3
+                className="font-bold text-lg mb-2"
+                style={{ color: COLORS.text }}
+              >
+                {service.title}
+              </h3>
+              <p className="text-sm leading-relaxed" style={{ color: COLORS.textMuted }}>
+                {service.desc}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -265,15 +357,13 @@ function Services() {
   );
 }
 
-function Why() {
-  const reasons = [
-    { number: "100%", label: "Foco no seu nicho", desc: "Só atendemos escolas e buffets" },
-    { number: "30d", label: "Primeiros resultados", desc: "Estratégia ativa no primeiro mês" },
-    { number: "0", label: "Achismos", desc: "Tudo baseado em dados reais" },
-  ];
-
+function Results() {
   return (
-    <section className="py-24 px-6">
+    <section
+      id="resultados"
+      className="py-24 px-6 md:px-16"
+      style={{ background: COLORS.bg }}
+    >
       <div className="max-w-6xl mx-auto">
         <motion.div
           variants={fadeUp}
@@ -282,29 +372,145 @@ function Why() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Por que a MANAH?</h2>
-          <p className="text-[#666] text-lg max-w-xl mx-auto">
-            Enquanto outras agências atendem qualquer cliente, nós escolhemos ser
-            os melhores em dois segmentos específicos.
+          <p
+            className="text-xs font-semibold tracking-widest uppercase mb-3"
+            style={{ color: COLORS.neon }}
+          >
+            Nossos números
           </p>
+          <h2
+            className="text-3xl md:text-5xl font-black"
+            style={{ color: COLORS.text }}
+          >
+            Resultados que{" "}
+            <span
+              style={{
+                backgroundImage: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              falam por si
+            </span>
+          </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {reasons.map((r, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {results.map((result, i) => (
             <motion.div
-              key={r.label}
+              key={result.label}
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               custom={i}
-              className="text-center p-8 border border-white/6 rounded-2xl bg-gradient-to-b from-[#7B00FF]/5 to-transparent"
+              className="text-center p-8 rounded-2xl"
+              style={{
+                background: COLORS.card,
+                border: `1px solid ${COLORS.border}`,
+              }}
             >
-              <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#7B00FF] to-[#C070FF] mb-2">
-                {r.number}
+              <p
+                className="text-4xl md:text-5xl font-black mb-2"
+                style={{
+                  backgroundImage: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                {result.number}
+              </p>
+              <p className="text-sm" style={{ color: COLORS.textMuted }}>
+                {result.label}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Testimonials() {
+  return (
+    <section
+      id="depoimentos"
+      className="py-24 px-6 md:px-16"
+      style={{ background: COLORS.bgAlt }}
+    >
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <p
+            className="text-xs font-semibold tracking-widest uppercase mb-3"
+            style={{ color: COLORS.neon }}
+          >
+            Depoimentos
+          </p>
+          <h2
+            className="text-3xl md:text-5xl font-black"
+            style={{ color: COLORS.text }}
+          >
+            O que nossos{" "}
+            <span
+              style={{
+                backgroundImage: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              clientes dizem
+            </span>
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={t.name}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              custom={i}
+              className="p-6 rounded-2xl flex flex-col gap-4"
+              style={{
+                background: COLORS.card,
+                border: `1px solid ${COLORS.border}`,
+              }}
+            >
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, j) => (
+                  <Star
+                    key={j}
+                    size={14}
+                    fill={COLORS.neon}
+                    color={COLORS.neon}
+                  />
+                ))}
               </div>
-              <div className="font-bold text-lg mb-1">{r.label}</div>
-              <div className="text-[#666] text-sm">{r.desc}</div>
+              <p
+                className="text-sm leading-relaxed flex-1"
+                style={{ color: COLORS.textMuted }}
+              >
+                "{t.text}"
+              </p>
+              <div
+                className="pt-4"
+                style={{ borderTop: `1px solid ${COLORS.border}` }}
+              >
+                <p className="font-bold text-sm" style={{ color: COLORS.text }}>
+                  {t.name}
+                </p>
+                <p className="text-xs mt-1" style={{ color: COLORS.neon }}>
+                  {t.role}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -315,32 +521,67 @@ function Why() {
 
 function CTA() {
   return (
-    <section className="py-24 px-6">
-      <div className="max-w-3xl mx-auto">
+    <section
+      id="contato"
+      className="py-24 px-6 md:px-16"
+      style={{ background: COLORS.bg }}
+    >
+      <div className="max-w-3xl mx-auto text-center">
         <motion.div
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="relative border border-[#7B00FF]/30 bg-gradient-to-b from-[#7B00FF]/10 to-transparent rounded-3xl p-12 text-center overflow-hidden"
         >
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-1 bg-gradient-to-r from-transparent via-[#7B00FF] to-transparent" />
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-8 tracking-widest uppercase"
+            style={{
+              border: `1px solid ${COLORS.neon}60`,
+              color: COLORS.neon,
+              background: `${COLORS.neon}10`,
+            }}
+          >
+            <Users size={14} />
+            Vamos conversar
+          </div>
 
-          <h2 className="text-3xl md:text-4xl font-black mb-4">
-            Pronto para ser referência?
+          <h2
+            className="text-3xl md:text-5xl font-black mb-6"
+            style={{ color: COLORS.text }}
+          >
+            Pronto para levar sua escola ao{" "}
+            <span
+              style={{
+                backgroundImage: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              próximo nível?
+            </span>
           </h2>
-          <p className="text-[#777] text-lg mb-8 max-w-lg mx-auto">
-            Fale com a gente pelo WhatsApp. Sem enrolação, sem proposta genérica —
-            só estratégia pensada para o seu negócio.
+
+          <p
+            className="text-lg mb-10 leading-relaxed"
+            style={{ color: COLORS.textMuted }}
+          >
+            Entre em contato e descubra como uma estratégia digital especializada
+            pode transformar os resultados da sua instituição.
           </p>
+
           <a
             href="https://wa.me/5511999999999"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-[#7B00FF] hover:bg-[#9B30FF] text-white font-bold px-10 py-4 rounded-full text-base transition-all duration-300 hover:shadow-2xl hover:shadow-[#7B00FF]/40 hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-full font-bold text-base transition-all duration-200"
+            style={{
+              background: `linear-gradient(135deg, ${COLORS.neon}, ${COLORS.neonLight})`,
+              color: "#fff",
+              boxShadow: `0 0 40px ${COLORS.neon}50`,
+            }}
           >
-            <MessageCircle size={18} />
-            Falar no WhatsApp
+            Falar com um especialista
+            <ArrowRight size={18} />
           </a>
         </motion.div>
       </div>
@@ -350,17 +591,35 @@ function CTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-white/6 py-10 px-6">
+    <footer
+      className="py-8 px-6 md:px-16"
+      style={{
+        background: COLORS.bgAlt,
+        borderTop: `1px solid ${COLORS.border}`,
+      }}
+    >
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-        <img src="/MANAH---LOGO-PNG.png" alt="MANAH" className="h-14 w-auto opacity-80" />
-        <p className="text-[#444] text-sm">
-          © {new Date().getFullYear()} MANAH Marketing. Todos os direitos reservados.
+        <img src="/MANAH.png" alt="MANAH" className="h-24 w-auto" />
+        <p className="text-sm" style={{ color: COLORS.textMuted }}>
+          © {new Date().getFullYear()} MANAH Agência. Todos os direitos reservados.
         </p>
         <div className="flex items-center gap-4">
-          <a href="#" className="text-[#555] hover:text-[#9B30FF] transition-colors">
+          <a
+            href="#"
+            className="transition-colors duration-200"
+            style={{ color: COLORS.textMuted }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.neonLight)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+          >
             <Share2 size={18} />
           </a>
-          <a href="#" className="text-[#555] hover:text-[#9B30FF] transition-colors">
+          <a
+            href="#"
+            className="transition-colors duration-200"
+            style={{ color: COLORS.textMuted }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.neonLight)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+          >
             <Globe size={18} />
           </a>
         </div>
@@ -369,15 +628,14 @@ function Footer() {
   );
 }
 
-// ── App ──────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#080808] text-white">
+    <div style={{ background: COLORS.bg, minHeight: "100vh" }}>
       <Navbar />
       <Hero />
-      <Niches />
       <Services />
-      <Why />
+      <Results />
+      <Testimonials />
       <CTA />
       <Footer />
     </div>
