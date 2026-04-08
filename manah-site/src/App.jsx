@@ -146,8 +146,8 @@ function Navbar() {
 
 function Hero() {
   return (
-     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-16"
+      <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-16 pt-32"
       style={{ background: COLORS.bg }}
     >
      
