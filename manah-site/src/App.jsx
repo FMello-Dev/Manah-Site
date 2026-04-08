@@ -146,11 +146,11 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section
+     <section
       className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-16"
       style={{ background: COLORS.bg }}
     >
-      {/* Background glow */}
+     
       <div
         className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20 pointer-events-none"
         style={{
